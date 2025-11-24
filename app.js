@@ -116,7 +116,7 @@ const renderLibrary = () => {
 
     const deleteBtn = document.createElement("button");
     deleteBtn.type = "button";
-    deleteBtn.classList.add("delete-btn")
+    deleteBtn.classList.add("delete-btn");
     deleteBtn.dataset.id = id;
     deleteBtn.setAttribute("aria-label", `Delete ${name}`);
     deleteBtn.textContent = "Delete";
@@ -129,8 +129,6 @@ const renderLibrary = () => {
     card.appendChild(actions);
 
     bookContainer.appendChild(card);
-
-    bookContainer;
   });
 };
 
