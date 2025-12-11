@@ -49,3 +49,18 @@ body,
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
+
+.read-status {
+  display: inline-block;
+  margin: 0.25rem 0;
+  padding: 0.1rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  border: 1px solid #ccc;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}

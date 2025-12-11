@@ -5,6 +5,7 @@ function Book(name, author, pages) {
   this.author = author;
   this.pages = pages;
   this.id = crypto.randomUUID();
+  this.read = false;
 }
 
 Book.prototype.bookInfo = function () {
@@ -13,6 +14,7 @@ Book.prototype.bookInfo = function () {
     author: this.author,
     pages: this.pages,
     id: this.id,
+    read: this.read,
   };
 };
 
@@ -26,6 +28,11 @@ function deleteBook(id) {
   if (idx !== -1) {
     myLibrary.splice(idx, 1);
   }
+}
+
+function toggleRead(id) {
+  const book = myLibrary.find((b) => b.id === id);
+  if (book) book.read = !book.read;
 }
 
 addBook("Hobbit", "JRR", 8526);
@@ -97,22 +104,32 @@ const renderLibrary = () => {
   bookContainer.innerHTML = "";
 
   myLibrary.forEach((book) => {
-    const { name, author, pages, id } = book.bookInfo();
+    const { name, author, pages, id, read } = book.bookInfo();
 
     const card = document.createElement("div");
     card.classList.add("book-card");
 
     const titleEl = document.createElement("h2");
-    titleEl.innerText = name;
+    titleEl.textContent = name;
 
     const authorEl = document.createElement("p");
-    authorEl.innerText = author;
+    authorEl.textContent = author;
 
     const pagesEl = document.createElement("h3");
-    pagesEl.innerText = pages;
+    pagesEl.textContent = pages;
+
+    const statusEl = document.createElement("span");
+    statusEl.classList.add("read-status");
+    statusEl.textContent = read ? "Read" : "Unread";
 
     const actions = document.createElement("div");
     actions.classList.add("card-actions");
+
+    const toggleBtn = document.createElement("button");
+    toggleBtn.type = "button";
+    toggleBtn.classList.add("toggle-read-btn");
+    toggleBtn.dataset.id = id;
+    toggleBtn.textContent = read ? "Mark Unread" : "Mark Read";
 
     const deleteBtn = document.createElement("button");
     deleteBtn.type = "button";
@@ -122,10 +139,12 @@ const renderLibrary = () => {
     deleteBtn.textContent = "Delete";
 
     actions.appendChild(deleteBtn);
+    actions.appendChild(toggleBtn);
 
     card.appendChild(titleEl);
     card.appendChild(authorEl);
     card.appendChild(pagesEl);
+    card.appendChild(statusEl);
     card.appendChild(actions);
 
     bookContainer.appendChild(card);
@@ -133,10 +152,18 @@ const renderLibrary = () => {
 };
 
 bookContainer.addEventListener("click", (e) => {
-  const btn = e.target.closest(".delete-btn");
-  if (!btn) return;
-  deleteBook(btn.dataset.id);
-  renderLibrary();
+  const toggle = e.target.closest(".toggle-read-btn");
+  if (toggle) {
+    toggleRead(toggle.dataset.id);
+    renderLibrary();
+    return;
+  }
+
+  const del = e.target.closest(".delete-btn");
+  if (del) {
+    deleteBook(del.dataset.id);
+    renderLibrary();
+  }
 });
 
 renderLibrary();
